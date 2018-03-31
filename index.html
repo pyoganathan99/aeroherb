@@ -1,0 +1,132 @@
+<html>
+
+<head>
+    <title>Hackathon</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+    
+        .card{
+            background:#ffffff;box-shadow:#cccccc 1px 1px 1px 1px; padding:24px
+        }
+    
+    </style>
+</head>
+
+<body>
+    <nav class="nav-extended">
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo">Sell / Buy Products</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="sass.html">Sass</a></li>
+                <li><a href="badges.html">Components</a></li>
+                <li><a href="collapsible.html">JavaScript</a></li>
+            </ul>
+        </div>
+        <div class="nav-content">
+            <ul class="tabs tabs-transparent">
+                <li class="tab"><a class="active" href="#test1">Sell</a></li>
+                <li class="tab"><a href="#test2">Buy</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <ul class="sidenav" id="mobile-demo">
+        <li><a href="sass.html">Sass</a></li>
+        <li><a href="badges.html">Components</a></li>
+        <li><a href="collapsible.html">JavaScript</a></li>
+    </ul>
+
+    <div id="test1" class="col s12" style="padding:24px;">
+        <div class="row">
+            <form class="col s12">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input id="first_name" type="text" class="validate">
+                        <label for="first_name">First Name</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="last_name" type="text" class="validate">
+                        <label for="last_name">Last Name</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s8">
+                        <input id="product" type="text" class="validate">
+                        <label for="product">Product Name</label>
+                    </div>
+                    <div class="input-field col s4">
+                        <input id="price" type="number" class="validate">
+                        <label for="price">Price</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="description" type="text" class="validate">
+                        <label for="description">Product Description</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="phone" type="number" class="validate">
+                        <label for="phone">Phone</label>
+                    </div>
+                </div>
+                <center><a onclick="upload();" class="waves-effect waves-teal btn-flat">Submit</a></center>
+            </form>
+        </div>
+    </div>
+    <div id="test2" class="col s12" style="height:100%;background:#eeeeee;padding:12px;">
+        Loading...
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyDc5oD9o7yp9s1Fpy53NeBnn8HwqiWjaoE",
+        authDomain: "aroherb-c6377.firebaseapp.com",
+        databaseURL: "https://aroherb-c6377.firebaseio.com",
+        projectId: "aroherb-c6377",
+        storageBucket: "aroherb-c6377.appspot.com",
+        messagingSenderId: "193110530806"
+      };
+      firebase.initializeApp(config);
+    </script>
+    <script>
+
+        function upload(){
+            firebase.database().ref('products').push({
+                person: $("#first_name").val() + " " + $("#last_name").val(),
+                product: $("#product").val(),
+                description: $("#description").val(),
+                price: $("#price").val(),
+                phone: $("#phone").val()
+            })
+        }
+
+        firebase.database().ref('products').on('value', function(snap){
+            var products = snap.val();
+
+            $('#test2').html("");
+
+            for(var key in products){
+                document.getElementById('test2').innerHTML += 
+                    "<div class='card'><b>Product: </b>" + products[key].product +
+                    "<br><b>Description: </b>" + products[key].description +
+                    "<br><b>Seller: </b>" + products[key].person +
+                    "<br><b>Price: </b>" + products[key].price +
+                    "<br><b>Contact: </b>" + products[key].phone + "</div>";
+            }
+        })
+
+    </script>
+
+</body>
+
+</html>
